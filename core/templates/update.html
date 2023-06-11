@@ -7,6 +7,9 @@
 </head>
 <body>
 
+    <h3>EDIÇÃO DE CADASTRO</h3>
+    <hr>
+
     {{pessoa.id}} - {{ pessoa.nome }}
 
     <form action="{% url 'update' pessoa.id %}" method="POST"> 

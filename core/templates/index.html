@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    Hello, World!
+
+    <!-- Usando djinja é uma linguagem de templates que me dá possibilidades 
+    de manipular dados que vem do back-and,imprimindo e pegando a var da view por ex  -->
+
+    <ul>
+        {% for pessoa in pessoas %}                      <!-- chaves+porcent. para comandos -->             
+            <li>{{ pessoa.id }} - {{ pessoa.nome }} 
+                <a href="{% url 'editar' pessoa.id %}">Editar</a>
+                <a href="{% url 'delete' pessoa.id %}">Deletar</a>
+            </li> <!-- interpolação para variaveis -->   
+        {% endfor %}
+    </ul>
+
+    <form action="{% url 'salvar' %}" method="POST"> <!-- Criando url salvar quando der submit -->
+        {% csrf_token %} <!-- para proteção do form -->
+        <input type="text" name="nome">
+            <!-- Após clicar no botão ele irá dar submit do meu forme é enviar os dados do 
+            input para a view que vai estar amarrada a minha url: salvar-->
+        <button type="submit">Salvar</button> 
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+.container{
+    background-color: rgba(45, 76, 111, 0.915);
+    /* color: rgb(54, 187, 54); */
+}
+
+/* python manage.py collectstatic */

@@ -3,31 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https:kit.fontawesome.com/8786c39b09.js"></script>
+    
     <title>Document</title>
 </head>
 <body>
-    <h3>CADASTRO DE PESSOAS</h3>
-    <hr>
+    <div class="container mt-3 p-5 rounded-2">
 
-    <!-- Usando djinja é uma linguagem de templates que me dá possibilidades 
-    de manipular dados que vem do back-and,imprimindo e pegando a var da view por ex  -->
+        <h3 class="text-light">CADASTRO DE PESSOAS</h3>
+        <hr class="bg-light">
+        <!-- Usando djinja é uma linguagem de templates que me dá possibilidades de manipular dados que vem do back-and,imprimindo e pegando a var da view por ex  -->
 
-    <ul>
-        {% for pessoa in pessoas %}                      <!-- chaves+porcent. para comandos -->             
-            <li>{{ pessoa.id }} - {{ pessoa.nome }} 
-                <a href="{% url 'editar' pessoa.id %}">Editar</a>
-                <a href="{% url 'delete' pessoa.id %}">Deletar</a>
-            </li> <!-- interpolação para variaveis -->   
-        {% endfor %}
-    </ul>
+        <!-- =============================================================== -->
 
-    <form action="{% url 'salvar' %}" method="POST"> <!-- Criando url salvar quando der submit -->
-        {% csrf_token %} <!-- para proteção do form -->
-        <input type="text" name="nome">
-            <!-- Após clicar no botão ele irá dar submit do meu forme é enviar os dados do 
-            input para a view que vai estar amarrada a minha url: salvar-->
-        <button type="submit">Salvar</button> 
-    </form>
+        <table class="table table-dark table-striped">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Ação</th>
+                <!-- <th scope="col">Deletar</th> -->
+              </tr>
+            </thead>
+            <tbody>
+                {% for pessoa in pessoas %}
+                    <tr>
+                        <td scope="row">{{ pessoa.id }}</td>
+                        <td>{{ pessoa.nome }}</td>
+                        <td>{{ pessoa.email }}</td>
+                        <td>
+                            <a type="button" class="btn btn-warning btn-sm" role="button" href="{% url 'editar' pessoa.id %}"><i class="far fa-edit"></i>&nbsp;Editar</a>
+                            <a type="button" class="btn btn-danger btn-sm" role="button"  href="{% url 'delete' pessoa.id %}"><i class="far fa-trash-alt"></i>&nbsp;Excluir</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
 
+    
+        <hr class="bg-light">
+
+        <!-- =============================================================== -->
+
+        <form action="{% url 'salvar' %}" method="POST"> <!-- Criando url salvar quando der submit -->
+            {% csrf_token %} <!-- para proteção do form -->
+            <div class="mb-3">
+              <label class="text-light" for="nome" class="form-label">Nome:</label>
+              <input type="text" name="nome" class="form-control border border-secondary" id="nome">
+              <!-- Após clicar no botão ele irá dar submit do meu forme é enviar os dados do input para a view que vai estar amarrada a minha url: salvar-->
+            </div>
+
+            <!-- <div class="mb-3">
+              <label  class="text-light" for="exampleInputEmail1" class="form-label">Email</label>
+              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              <div id="emailHelp" class="form-text text-dark">We'll never share your email with anyone else.</div>
+            </div> -->
+
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </form>
+    </div>
+
+
+
+    <link rel="stylesheet" href="../static/bootstrap/js/bootstrap.min.js">
 </body>
 </html>

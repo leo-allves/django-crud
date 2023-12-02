@@ -4,8 +4,11 @@ from django.db import models   # model reposavel por criar o model já dentro da
 
 class Pessoa(models.Model):    # Model no django e como eu crio dados no BD
     nome = models.CharField(max_length=100)  # uma vez criado posso registrar no admin.py
+    email = models.EmailField(null=True, blank=True)
+    # outros campos...
 
     # função que define a visibilidade no BD pelo valor
         # Exemplo imprime a pessoa Marcos e não object1 ...
     def __str__(self) -> str:
-        return self.nome
+        return self.nome # ou qualquer outro campo representativo
+    

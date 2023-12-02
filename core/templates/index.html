@@ -5,19 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/css/style.css">
-    <script src="https:kit.fontawesome.com/8786c39b09.js"></script>
+    <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
     
-    <title>Document</title>
+    <title>Cadastro de Pessoas</title>
 </head>
 <body>
     <div class="container mt-3 p-5 rounded-2">
-
         <h3 class="text-light">CADASTRO DE PESSOAS</h3>
         <hr class="bg-light">
-        <!-- Usando djinja é uma linguagem de templates que me dá possibilidades de manipular dados que vem do back-and,imprimindo e pegando a var da view por ex  -->
 
-        <!-- =============================================================== -->
+        <!-- Formulário de Cadastro -->
+        <form action="{% url 'salvar' %}" method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="text-light" for="nome" class="form-label">Nome:</label>
+            <input type="text" name="nome" class="form-control border border-secondary" id="nome">
+          </div>
 
+          <div class="mb-3">
+            <label class="text-light" for="email" class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" id="email">
+          </div>
+
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+
+        <hr class="bg-light">
+
+        <!-- Tabela de Pessoas -->
         <table class="table table-dark table-striped">
             <thead>
               <tr>
@@ -25,7 +40,6 @@
                 <th scope="col">Nome</th>
                 <th scope="col">E-mail</th>
                 <th scope="col">Ação</th>
-                <!-- <th scope="col">Deletar</th> -->
               </tr>
             </thead>
             <tbody>
@@ -35,39 +49,23 @@
                         <td>{{ pessoa.nome }}</td>
                         <td>{{ pessoa.email }}</td>
                         <td>
-                            <a type="button" class="btn btn-warning btn-sm" role="button" href="{% url 'editar' pessoa.id %}"><i class="far fa-edit"></i>&nbsp;Editar</a>
-                            <a type="button" class="btn btn-danger btn-sm" role="button"  href="{% url 'delete' pessoa.id %}"><i class="far fa-trash-alt"></i>&nbsp;Excluir</a>
+                            <a type="button" class="btn btn-warning btn-sm" role="button" href="{% url 'editar' pessoa.id %}">
+                                <i class="far fa-edit"></i>&nbsp;Editar
+                            </a>
+                            <!-- Formulário de Exclusão -->
+                            <form action="{% url 'delete' pessoa.id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="far fa-trash-alt"></i>&nbsp;Excluir
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}
             </tbody>
           </table>
-
-    
-        <hr class="bg-light">
-
-        <!-- =============================================================== -->
-
-        <form action="{% url 'salvar' %}" method="POST"> <!-- Criando url salvar quando der submit -->
-            {% csrf_token %} <!-- para proteção do form -->
-            <div class="mb-3">
-              <label class="text-light" for="nome" class="form-label">Nome:</label>
-              <input type="text" name="nome" class="form-control border border-secondary" id="nome">
-              <!-- Após clicar no botão ele irá dar submit do meu forme é enviar os dados do input para a view que vai estar amarrada a minha url: salvar-->
-            </div>
-
-            <!-- <div class="mb-3">
-              <label  class="text-light" for="exampleInputEmail1" class="form-label">Email</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-              <div id="emailHelp" class="form-text text-dark">We'll never share your email with anyone else.</div>
-            </div> -->
-
-            <button type="submit" class="btn btn-primary">Salvar</button>
-          </form>
     </div>
 
-
-
-    <link rel="stylesheet" href="../static/bootstrap/js/bootstrap.min.js">
+    <script src="../static/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

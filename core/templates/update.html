@@ -12,11 +12,20 @@
     <hr>
 
     {{pessoa.id}} - {{ pessoa.nome }}
+    <br>
+    {{pessoa.email}} - {{ pessoa.email }}
 
-    <form action="{% url 'update' pessoa.id %}" method="POST"> 
+    <!-- update.html -->
+    <!-- update.html -->
+    <form action="{% url 'update' pessoa.id %}" method="post">
         {% csrf_token %}
-        <input type="text" name="nome" value="{{pessoa.nome}}">
-        <button type="submit">Update</button> 
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" value="{{ pessoa.nome }}">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ pessoa.email }}">
+
+        <button type="submit">Update</button>
     </form>
 
 </body>

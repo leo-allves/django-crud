@@ -1,6 +1,8 @@
+# core/admin.py
+
 from django.contrib import admin
-from .models import Pessoa  # importo a class o medel criado
+from .models import Pessoa
 
-# Register your models here.
-
-admin.site.register(Pessoa)   # registro o model que eu quero que apareça
+@admin.register(Pessoa)
+class PessoaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nome', 'email')  # Certifique-se de que 'email' está incluído aqui.

@@ -74,31 +74,32 @@ WSGI_APPLICATION = "app.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-
-# # MySQL
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'Movimento',
-#         'USER': 'Leonardo',
-#         'PASSWORD': 'Leo@191192',
-#         'HOST': 'localhost',  # Ou o endereço IP do seu servidor MySQL
-#         'PORT': '3306',  # O porto padrão do MySQL é 3306
-#         'OPTIONS': {
-#             'charset': 'utf8mb4',
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#         },
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
 #     }
 # }
 
 
+# settings.py
+
+
+# MySQL
+DATABASES = {
+    'default': {
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'Movimento',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',  # Ou o endereço IP do seu servidor MySQL
+        'PORT': '3306',  # O porto padrão do MySQL é 3306
+        # 'OPTIONS': {
+        #     'charset': 'utf8mb4',
+        #     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        # },
+    }
+}
 
 
 # Password validation

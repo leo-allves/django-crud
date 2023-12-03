@@ -1,56 +1,48 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Pessoa     # importando o model Pessoa criado
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from .models import Pessoa  # Importando o modelo Pessoa criado
 
-# Create your views home a index.
+# Sinal para executar antes de uma Pessoa ser salva
+@receiver(pre_save, sender=Pessoa)
+def minha_funcao_de_sinal(sender, instance, **kwargs):
+    # Código para executar antes de uma Pessoa ser salva
+    pass
 
-
-# RAED
+# Função que lida com a exibição da página inicial
 def home(request):
-    pessoas = Pessoa.objects.all()   # Pegando todas as pessoas cadastradas pela view
-    # enviando pro meu template atraves da variavel e valor ("pessoas": pessoas)
-    return render(request, "index.html", {"pessoas": pessoas}) 
+    pessoas = Pessoa.objects.all()  # Pegando todas as pessoas cadastradas
+    return render(request, "index.html", {"pessoas": pessoas})
 
-
-#CREATE
+# Função para criar uma nova Pessoa
 def salvar(request):
-    # View tem a função de acessar os models para: (criar e ler ...) 
-        # -> bate no banco e volta com dado 
-            # -> Injeto o dado no template
-                # -> Jogando a resposta de volta, neste caso a index.html
-
-                # IMPRIMIR: Crio o dado pela view, pego a lista toda envio para index -> 
-                    # -> No index faço um loop para pegar as pessoa para imprimir em tela
-
     if request.method == "POST":
-        vnome = request.POST.get("nome") # Pego o dado inserido do form via POST após o submit e guardei na variavel nome
+        vnome = request.POST.get("nome")
         vemail = request.POST.get("email")
-        Pessoa.objects.create(nome=vnome, email=vemail) # Criei no BD o novo nome da nova pessoa 
-        return redirect('home') # e envia para meu forme
+        Pessoa.objects.create(nome=vnome, email=vemail)  # Criando uma nova Pessoa no BD
+        return redirect('home')  # Redirecionando para a página inicial
     else:
         return render(request, "index.html")
 
-# EDIT
+# Função para editar uma Pessoa existente
 def editar(request, id):
     pessoa = get_object_or_404(Pessoa, id=id)
     return render(request, "update.html", {"pessoa": pessoa})
 
-# READ UPDATE
+# Função para atualizar uma Pessoa
 def update(request, id):
     pessoa = get_object_or_404(Pessoa, id=id)
     if request.method == "POST":
-        pessoa.nome = request.POST.get("nome")  # nome atualizado
-        pessoa.email = request.POST.get('email')  # email atualizado
-        pessoa.save()
-        return redirect('home')  # certifique-se de que 'home' é o nome correto da sua URL
+        pessoa.nome = request.POST.get("nome")
+        pessoa.email = request.POST.get('email')
+        pessoa.save()  # Salvando as alterações
+        return redirect('home')  # Redirecionando para a página inicial
     else:
-        # Se não for um POST, mostre o formulário com os dados atuais da pessoa
         return render(request, 'update.html', {'pessoa': pessoa})
 
-
-
-# DELETE
+# Função para deletar uma Pessoa
 def delete(request, id):
+    pessoa = get_object_or_404(Pessoa, id=id)
     if request.method == "POST":
-        pessoa = get_object_or_404(Pessoa, id=id)
-        pessoa.delete()
-    return redirect('home')
+        pessoa.delete()  # Deletando a Pessoa
+    return redirect('home')  # Redirecionando para a página inicial após a deleção

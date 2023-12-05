@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
+    
+    <title>Cadastrar Movimento</title>
+</head>
+<body>
+    <div class="container mt-3 p-5 rounded-2 bg-dark">
+        <h3 class="text-light">Cadastrar Movimento</h3>
+        <hr class="bg-light">
+
+        <!-- Formulário de Cadastro de Movimento -->
+        <form action="{% url 'salvar_movimento' %}" method="POST">
+            {% csrf_token %}
+            
+            <!-- Seção de Cadastro do Movimento -->
+            <h4 class="text-light">Dados do Movimento</h4>
+            <div class="mb-3">
+                <label class="text-light form-label" for="cadastro_id">Cadastro:</label>
+                <select name="cadastro_id" class="form-select border border-secondary" id="cadastro_id" required>
+                    <option value="">Selecione um cadastro</option>
+                    {% for cadastro in cadastros %}
+                        <option value="{{ cadastro.id }}">{{ cadastro.nome }} {{ cadastro.sobrenome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="text-light form-label" for="endereco_evento">Endereço do Evento:</label>
+                <input type="text" name="endereco_evento" class="form-control border border-secondary" id="endereco_evento" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="text-light form-label" for="data_evento">Data do Evento:</label>
+                <input type="date" name="data_evento" class="form-control border border-secondary" id="data_evento" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="text-light form-label" for="observacoes">Observações:</label>
+                <textarea name="observacoes" class="form-control border border-secondary" id="observacoes" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar Movimento</button>
+        </form>
+    </div>
+
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

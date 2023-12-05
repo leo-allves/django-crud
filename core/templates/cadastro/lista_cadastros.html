@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
+    <title>Lista de Cadastros</title>
+</head>
+<body>
+    <div class="container mt-3 p-5 rounded-2 bg-dark">
+        <h3 class="text-light">Lista de Cadastros</h3>
+        <hr class="bg-light">
+
+        <!-- Seção de Filtros (se necessário) -->
+        <!-- Aqui você pode adicionar uma seção de filtros -->
+
+        <!-- Tabela de Cadastros -->
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Sobrenome</th>
+                    <th>Idade</th>
+                    <th>Telefone</th>
+                    <th>Endereço</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>Data da Integração</th>
+                    <th>Resultado da Integração</th>
+                    <!-- Adicione mais cabeçalhos de tabela conforme necessário -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for cadastro in cadastros %}
+                    <tr>
+                        <td>{{ cadastro.nome }}</td>
+                        <td>{{ cadastro.sobrenome }}</td>
+                        <td>{{ cadastro.idade }}</td>
+                        <td>{{ cadastro.telefone }}</td>
+                        <!-- Assumindo que temos uma relação OneToOne entre Cadastro e EnderecoDosCadastros -->
+                        <td>{{ cadastro.enderecodoscadastros.endereco }}</td>
+                        <td>{{ cadastro.enderecodoscadastros.cidade }}</td>
+                        <td>{{ cadastro.enderecodoscadastros.estado }}</td>
+                        <!-- Assumindo que temos uma relação OneToOne entre Cadastro e Integração -->
+                        <td>{{ cadastro.integracao.data_integracao }}</td>
+                        <td>{{ cadastro.integracao.resultado }}</td>
+                        <!-- Inclua mais dados conforme necessário -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

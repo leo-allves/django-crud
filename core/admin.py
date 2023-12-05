@@ -1,26 +1,39 @@
 # core/admin.py
 
 from django.contrib import admin
-from .models import Pessoa
+from core.models import Cadastro, EnderecoDosCadastros, Integracao, Movimento
+# from core.models import Acompanhamento
 
-@admin.register(Pessoa)
-class PessoaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nome', 'email')  # Campos que você quer mostrar na lista
+# Registrando cada modelo para que eles apareçam na interface do admin do Django.
 
-    # As permissões padrão já permitem todas as ações para superusuários.
-    # Os métodos a seguir são para controle fino, se necessário.
+class CadastroAdmin(admin.ModelAdmin):
+    list_display = ['nome', 'sobrenome', 'idade', 'telefone', 'escolha_acompanhamento']
+    search_fields = ['nome', 'sobrenome', 'telefone']
+    list_filter = ['idade', 'escolha_acompanhamento']
 
-    def has_add_permission(self, request):
-        # Permite adicionar novas Pessoas
-        return True
+class EnderecoDosCadastrosAdmin(admin.ModelAdmin):
+    list_display = ['cadastro', 'endereco', 'cidade', 'estado']  # Campos que você quer mostrar na lista
+    search_fields = ['cidade', 'estado']
+    list_filter = ['cidade', 'estado']
 
-    # def has_change_permission(self, request, obj=None):
-    #     # Permite a alteração de Pessoas existentes
-    #     return True
+# class AcompanhamentoAdmin(admin.ModelAdmin):
+#     list_display = ['cadastro', 'data_ligacao', 'resultado_acompanhamento']
+#     search_fields = ['cadastro__nome', 'cadastro__sobrenome']
+#     list_filter = ['data_ligacao']
 
-    # def has_delete_permission(self, request, obj=None):
-    #     # Permite deletar Pessoas
-    #     return True
+class IntegracaoAdmin(admin.ModelAdmin):
+    list_display = ['cadastro', 'data_integracao', 'resultado', 'notas']
+    search_fields = ['cadastro__nome', 'cadastro__sobrenome']
+    list_filter = ['data_integracao', 'resultado']
 
-    # Se você deseja adicionar uma visualização detalhada personalizada, você pode sobrescrever get_urls ou adicionar um método get_readonly_fields, por exemplo.
+class MovimentoAdmin(admin.ModelAdmin):
+    list_display = ['cadastro', 'endereco_evento', 'data_evento', 'observacoes']
+    search_fields = ['cadastro__nome', 'cadastro__sobrenome', 'endereco_evento']
+    list_filter = ['data_evento']
 
+# Registrando os modelos com o Django admin
+admin.site.register(Cadastro, CadastroAdmin)
+admin.site.register(EnderecoDosCadastros, EnderecoDosCadastrosAdmin)
+# admin.site.register(Acompanhamento, AcompanhamentoAdmin)
+admin.site.register(Integracao, IntegracaoAdmin)
+admin.site.register(Movimento, MovimentoAdmin)

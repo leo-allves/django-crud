@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
+    
+    <title>Detalhes do Movimento</title>
+</head>
+<body>
+    <div class="container mt-3 p-5 rounded-2 bg-dark">
+        <h3 class="text-light">Detalhes do Movimento</h3>
+        <hr class="bg-light">
+
+        <div class="card bg-secondary text-white mb-3">
+            <div class="card-header">Detalhes</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ movimento.cadastro.nome }} - {{ movimento.data_evento }}</h5>
+                <p class="card-text">
+                    <strong>Endereço do Evento:</strong> {{ movimento.endereco_evento }}<br>
+                    <strong>Observações:</strong> {{ movimento.observacoes }}<br>
+                    <strong>Data do Evento:</strong> {{ movimento.data_evento|date:"d/m/Y" }}<br>
+                    <strong>Data de Registro:</strong> {{ movimento.dat_inc|date:"d/m/Y H:i" }}
+                </p>
+            </div>
+        </div>
+
+        <a href="{% url 'lista_movimentos' %}" class="btn btn-primary">Voltar para a Lista de Movimentos</a>
+    </div>
+
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

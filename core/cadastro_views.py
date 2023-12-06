@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from .models import Cadastro, EnderecoDosCadastros, Integracao
 
 # Listar Cadastros
@@ -16,28 +16,10 @@ class CriarCadastroView(CreateView):
     template_name = 'cadastros/criar_cadastro.html'
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        # Criação de EnderecoDosCadastros e Integracao associados
-        endereco = EnderecoDosCadastros(
-            cadastro=self.object,
-            endereco=self.request.POST.get('endereco'),
-            numero=self.request.POST.get('numero'),
-            cep=self.request.POST.get('cep'),
-            bairro=self.request.POST.get('bairro'),
-            cidade=self.request.POST.get('cidade'),
-            estado=self.request.POST.get('estado')
-        )
-        endereco.save()
-
-        integracao = Integracao(
-            cadastro=self.object,
-            data_integracao=self.request.POST.get('data_integracao'),
-            resultado=self.request.POST.get('resultado_integracao'),
-            notas=self.request.POST.get('notas_integracao')
-        )
-        integracao.save()
-
-        return response
+        cadastro = form.save()
+        EnderecoDosCadastros.objects.create(cadastro=cadastro, **self.request.POST)
+        Integracao.objects.create(cadastro=cadastro, **self.request.POST)
+        return redirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse_lazy('lista_cadastros')
@@ -50,33 +32,42 @@ class AtualizarCadastroView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['endereco'] = get_object_or_404(EnderecoDosCadastros, cadastro=self.object)
-        context['integracao'] = get_object_or_404(Integracao, cadastro=self.object)
+        cadastro_id = self.kwargs.get('pk')
+        context['endereco'] = get_object_or_404(EnderecoDosCadastros, cadastro_id=cadastro_id)
+        context['integracao'] = get_object_or_404(Integracao, cadastro_id=cadastro_id)
         return context
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        endereco = get_object_or_404(EnderecoDosCadastros, cadastro=self.object)
-        integracao = get_object_or_404(Integracao, cadastro=self.object)
+        cadastro = form.save()
+        endereco = get_object_or_404(EnderecoDosCadastros, cadastro=cadastro)
+        integracao = get_object_or_404(Integracao, cadastro=cadastro)
 
-        # Atualização dos dados de EnderecoDosCadastros e Integracao
-        endereco.endereco = self.request.POST.get('endereco')
-        endereco.numero = self.request.POST.get('numero')
-        endereco.cep = self.request.POST.get('cep')
-        endereco.bairro = self.request.POST.get('bairro')
-        endereco.cidade = self.request.POST.get('cidade')
-        endereco.estado = self.request.POST.get('estado')
+        # Atualiza EnderecoDosCadastros e Integracao
+        for attr, value in self.request.POST.items():
+            setattr(endereco, attr, value) if hasattr(endereco, attr) else None
+            setattr(integracao, attr, value) if hasattr(integracao, attr) else None
+
         endereco.save()
-
-        integracao.data_integracao = self.request.POST.get('data_integracao')
-        integracao.resultado = self.request.POST.get('resultado_integracao')
-        integracao.notas = self.request.POST.get('notas_integracao')
         integracao.save()
-
-        return response
+        return redirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse_lazy('lista_cadastros')
+    
+
+# Detalhes do Cadastro
+class DetalhesCadastroView(DetailView):
+    model = Cadastro
+    template_name = 'cadastros/detalhes_cadastro.html'
+    context_object_name = 'cadastro'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cadastro = self.get_object()
+        context['endereco'] = get_object_or_404(EnderecoDosCadastros, cadastro=cadastro)
+        context['integracao'] = get_object_or_404(Integracao, cadastro=cadastro)
+        return context
+    
 
 # Deletar Cadastro
 class DeletarCadastroView(DeleteView):

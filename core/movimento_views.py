@@ -26,7 +26,7 @@ class CriarMovimentoView(CreateView):
 
     def form_valid(self, form):
         movimento = form.save(commit=False)
-        movimento.cadastro = Cadastro.objects.get(pk=self.request.POST.get('cadastro_id'))
+        movimento.cadastro = self.request.POST.get('cadastro_id')
         movimento.save()
         return redirect(self.get_success_url())
 

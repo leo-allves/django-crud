@@ -12,14 +12,9 @@ class CadastroAdmin(admin.ModelAdmin):
     list_filter = ['idade', 'escolha_acompanhamento']
 
 class EnderecoDosCadastrosAdmin(admin.ModelAdmin):
-    list_display = ['cadastro', 'endereco', 'cidade', 'estado']  # Campos que você quer mostrar na lista
+    list_display = ['cadastro', 'endereco', 'cidade', 'estado']
     search_fields = ['cidade', 'estado']
     list_filter = ['cidade', 'estado']
-
-# class AcompanhamentoAdmin(admin.ModelAdmin):
-#     list_display = ['cadastro', 'data_ligacao', 'resultado_acompanhamento']
-#     search_fields = ['cadastro__nome', 'cadastro__sobrenome']
-#     list_filter = ['data_ligacao']
 
 class IntegracaoAdmin(admin.ModelAdmin):
     list_display = ['cadastro', 'data_integracao', 'resultado', 'notas']
@@ -34,6 +29,12 @@ class MovimentoAdmin(admin.ModelAdmin):
 # Registrando os modelos com o Django admin
 admin.site.register(Cadastro, CadastroAdmin)
 admin.site.register(EnderecoDosCadastros, EnderecoDosCadastrosAdmin)
-# admin.site.register(Acompanhamento, AcompanhamentoAdmin)
 admin.site.register(Integracao, IntegracaoAdmin)
 admin.site.register(Movimento, MovimentoAdmin)
+
+# Futura inclusão:
+# admin.site.register(Acompanhamento, AcompanhamentoAdmin)
+# class AcompanhamentoAdmin(admin.ModelAdmin):
+#     list_display = ['cadastro', 'data_ligacao', 'resultado_acompanhamento']
+#     search_fields = ['cadastro__nome', 'cadastro__sobrenome']
+#     list_filter = ['data_ligacao']

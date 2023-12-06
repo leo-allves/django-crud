@@ -7,30 +7,33 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
     
-    <title>Detalhes do Movimento</title>
+    <title>Detalhes do Cadastro</title>
 </head>
 <body>
     <div class="container mt-3 p-5 rounded-2 bg-dark">
-        <h3 class="text-light">Detalhes do Movimento</h3>
+        <h3 class="text-light">Detalhes do Cadastro</h3>
         <hr class="bg-light">
 
-        <!-- Seção de Detalhes do Movimento -->
+        <!-- Seção de Detalhes do Cadastro -->
         <div class="mb-3 text-light">
-            <strong>Cadastro:</strong> {{ movimento.cadastro.nome }} {{ movimento.cadastro.sobrenome }}
+            <strong>Nome:</strong> {{ cadastro.nome }}
         </div>
         <div class="mb-3 text-light">
-            <strong>Endereço do Evento:</strong> {{ movimento.endereco_evento }}
+            <strong>Sobrenome:</strong> {{ cadastro.sobrenome }}
         </div>
         <div class="mb-3 text-light">
-            <strong>Data do Evento:</strong> {{ movimento.data_evento|date:"d/m/Y" }}
+            <strong>Idade:</strong> {{ cadastro.idade }}
         </div>
         <div class="mb-3 text-light">
-            <strong>Observações:</strong> {{ movimento.observacoes }}
+            <strong>Telefone:</strong> {{ cadastro.telefone }}
+        </div>
+        <div class="mb-3 text-light">
+            <strong>Escolha de Acompanhamento:</strong> {{ cadastro.escolha_acompanhamento }}
         </div>
 
         <!-- Botões de Ação -->
-        <a href="{% url 'editar_movimento' movimento.id %}" class="btn btn-primary">Editar</a>
-        <a href="{% url 'lista_movimentos' %}" class="btn btn-secondary">Voltar à Lista</a>
+        <a href="{% url 'editar_cadastro' cadastro.id %}" class="btn btn-primary">Editar</a>
+        <a href="{% url 'lista_cadastros' %}" class="btn btn-secondary">Voltar à Lista</a>
     </div>
 
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>

@@ -14,9 +14,9 @@
         <h3 class="text-light">Detalhes do Movimento</h3>
         <hr class="bg-light">
 
-        <!-- Seção de Detalhes do Movimento -->
+        <!-- Seção de Detalhes do Movimento ----->
         <div class="mb-3 text-light">
-            <strong>Cadastro:</strong> {{ movimento.cadastro.nome }} {{ movimento.cadastro.sobrenome }}
+            <strong>Nome do Evento:</strong> {{ movimento.nome_evento }}
         </div>
         <div class="mb-3 text-light">
             <strong>Endereço do Evento:</strong> {{ movimento.endereco_evento }}
@@ -30,9 +30,10 @@
 
         <!-- Botões de Ação -->
         <a href="{% url 'editar_movimento' movimento.id %}" class="btn btn-primary">Editar</a>
+        <a href="{% url 'deletar_movimento' movimento.id %}" class="btn btn-danger">Deletar</a>
         <a href="{% url 'lista_movimentos' %}" class="btn btn-secondary">Voltar à Lista</a>
     </div>
 
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
+    
+    <title>Editar Movimento</title>
+</head>
+<body>
+    <div class="container mt-3 p-5 rounded-2 bg-dark">
+        <h3 class="text-light">Editar Movimento</h3>
+        <hr class="bg-light">
+
+        <!-- Formulário de Edição de Movimento -->
+        <form action="{% url 'atualizar_movimento' movimento.id %}" method="POST">
+            {% csrf_token %}
+            
+            <!-- Seção de Movimento -->
+            <h4 class="text-light">Dados do Movimento</h4>
+            <div class="mb-3">
+                <label class="text-light form-label" for="cadastro">Cadastro Associado:</label>
+                <select name="cadastro" class="form-select border border-secondary" id="cadastro" required>
+                    <option value="">Selecione um cadastro</option>
+                    {% for cadastro in cadastros %}
+                        <option value="{{ cadastro.id }}" {% if cadastro.id == movimento.cadastro.id %}selected{% endif %}>
+                            {{ cadastro.nome }} {{ cadastro.sobrenome }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="text-light form-label" for="endereco_evento">Endereço do Evento:</label>
+                <input type="text" name="endereco_evento" class="form-control border border-secondary" id="endereco_evento" value="{{ movimento.endereco_evento }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="text-light form-label" for="data_evento">Data do Evento:</label>
+                <input type="date" name="data_evento" class="form-control border border-secondary" id="data_evento" value="{{ movimento.data_evento|date:'Y-m-d' }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="text-light form-label" for="observacoes">Observações:</label>
+                <textarea name="observacoes" class="form-control border border-secondary" id="observacoes" rows="3">{{ movimento.observacoes }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Atualizar Movimento</button>
+        </form>
+    </div>
+
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

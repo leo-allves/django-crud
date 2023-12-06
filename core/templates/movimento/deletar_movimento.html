@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
+    <title>Deletar Movimento</title>
+</head>
+<body>
+    <div class="container mt-3 p-5 rounded-2 bg-dark">
+        <h3 class="text-light">Deletar Movimento</h3>
+        <hr class="bg-light">
+
+        <!-- Alerta de confirmação de exclusão -->
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Atenção!</h4>
+            <p>Tem certeza de que deseja deletar este movimento?</p>
+            <p><strong>Movimento:</strong> {{ movimento.nome_evento }} em {{ movimento.data_evento|date:"d/m/Y" }}</p>
+            <hr>
+            <p class="mb-0">Esta ação é irreversível.</p>
+        </div>
+
+        <!-- Formulário de exclusão -->
+        <form action="{% url 'deletar_movimento' movimento.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Deletar</button>
+            <a href="{% url 'lista_movimentos' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from core.models import Movimento, Cadastro
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
@@ -41,5 +41,11 @@ class EditarMovimentoView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('lista_movimentos')
+
+# Deletar Cadastro
+class DeletarMovimentoView(DeleteView):
+    model = Movimento
+    template_name = 'movimento/deletar_movimento.html'
+    success_url = reverse_lazy('listar_movimento')
 
 # Adicione outras views conforme necessário...

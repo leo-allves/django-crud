@@ -14,5 +14,5 @@ urlpatterns = [
     path('movimento/novo/', movimento_views.CriarMovimentoView.as_view(), name='novo_movimento'),
     path('movimento/editar/<int:pk>/', movimento_views.EditarMovimentoView.as_view(), name='editar_movimento'),
     path('movimento/detalhes/<int:pk>/', movimento_views.DetalhesMovimentoView.as_view(), name='detalhes_movimento'),
-    # path('movimento/deletar/<int:pk>/', movimento_views.DeletarMovimentoView.as_view(), name='deletar_movimento'),  # Deletar Movimento
+    path('movimento/deletar/<int:pk>/', movimento_views.DeletarMovimentoView.as_view(), name='deletar_movimento'),  # Deletar Movimento
 ]

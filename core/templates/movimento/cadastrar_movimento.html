@@ -7,50 +7,45 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
     
-    <title>Cadastrar Cadastro</title>
+    <title>Cadastrar Movimento</title>
 </head>
 <body>
     <div class="container mt-3 p-5 rounded-2 bg-dark">
-        <h3 class="text-light">Cadastrar Cadastro</h3>
+        <h3 class="text-light">Cadastrar Movimento</h3>
         <hr class="bg-light">
 
-        <!-- Formulário de Cadastro -->
-        <form action="{% url 'salvar_cadastro' %}" method="POST">
+        <!-- Formulário de Cadastro de Movimento -->
+        <form action="{% url 'salvar_movimento' %}" method="POST">
             {% csrf_token %}
             
-            <!-- Seção de Cadastro -->
-            <h4 class="text-light">Dados do Cadastro</h4>
-
-            <!-- Campos do formulário -->
+            <!-- Seção de Movimento -->
+            <h4 class="text-light">Dados do Movimento</h4>
             <div class="mb-3">
-                <label class="text-light form-label" for="nome">Nome:</label>
-                <input type="text" name="nome" class="form-control border border-secondary" id="nome" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="text-light form-label" for="sobrenome">Sobrenome:</label>
-                <input type="text" name="sobrenome" class="form-control border border-secondary" id="sobrenome" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="text-light form-label" for="idade">Idade:</label>
-                <input type="number" name="idade" class="form-control border border-secondary" id="idade" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="text-light form-label" for="telefone">Telefone:</label>
-                <input type="text" name="telefone" class="form-control border border-secondary" id="telefone" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="text-light form-label" for="escolha_acompanhamento">Escolha Acompanhamento:</label>
-                <select name="escolha_acompanhamento" class="form-select border border-secondary" id="escolha_acompanhamento" required>
-                    <option value="">Selecione uma opção</option>
-                    <!-- Opções de acompanhamento -->
+                <label class="text-light form-label" for="cadastro">Cadastro Associado:</label>
+                <select name="cadastro" class="form-select border border-secondary" id="cadastro" required>
+                    <option value="">Selecione um cadastro</option>
+                    {% for cadastro in cadastros %}
+                        <option value="{{ cadastro.id }}">{{ cadastro.nome }} {{ cadastro.sobrenome }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Salvar Cadastro</button>
+            <div class="mb-3">
+                <label class="text-light form-label" for="endereco_evento">Endereço do Evento:</label>
+                <input type="text" name="endereco_evento" class="form-control border border-secondary" id="endereco_evento" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="text-light form-label" for="data_evento">Data do Evento:</label>
+                <input type="date" name="data_evento" class="form-control border border-secondary" id="data_evento" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="text-light form-label" for="observacoes">Observações:</label>
+                <textarea name="observacoes" class="form-control border border-secondary" id="observacoes" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar Movimento</button>
         </form>
     </div>
 

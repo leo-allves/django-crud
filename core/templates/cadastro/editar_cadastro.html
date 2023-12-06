@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -5,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
-    
     <title>Editar Cadastro</title>
 </head>
 <body>
@@ -15,44 +14,78 @@
         <hr class="bg-light">
 
         <!-- Formulário de Edição de Cadastro -->
-        <form action="{% url 'atualizar_cadastro' cadastro.id %}" method="POST">
+        <form action="{% url 'editar_cadastro' cadastro.id %}" method="POST">
             {% csrf_token %}
             
-            <!-- Seção de Edição do Cadastro -->
+            <!-- Seção de Cadastro -->
             <h4 class="text-light">Dados do Cadastro</h4>
             <div class="mb-3">
                 <label class="text-light form-label" for="nome">Nome:</label>
                 <input type="text" name="nome" class="form-control border border-secondary" id="nome" value="{{ cadastro.nome }}" required>
             </div>
-
             <div class="mb-3">
                 <label class="text-light form-label" for="sobrenome">Sobrenome:</label>
                 <input type="text" name="sobrenome" class="form-control border border-secondary" id="sobrenome" value="{{ cadastro.sobrenome }}" required>
             </div>
-
             <div class="mb-3">
                 <label class="text-light form-label" for="idade">Idade:</label>
                 <input type="number" name="idade" class="form-control border border-secondary" id="idade" value="{{ cadastro.idade }}" required>
             </div>
-
             <div class="mb-3">
                 <label class="text-light form-label" for="telefone">Telefone:</label>
                 <input type="text" name="telefone" class="form-control border border-secondary" id="telefone" value="{{ cadastro.telefone }}" required>
             </div>
 
+            <!-- Seção de Endereço -->
+            <h4 class="text-light mt-4">Endereço</h4>
             <div class="mb-3">
-                <label class="text-light form-label" for="escolha_acompanhamento">Escolha Acompanhamento:</label>
-                <select name="escolha_acompanhamento" class="form-select border border-secondary" id="escolha_acompanhamento" required>
-                    <option value="">Selecione uma opção</option>
-                    <!-- Insira aqui as opções de acompanhamento -->
-                    <!-- Certifique-se de marcar a opção atual do cadastro como selecionada -->
-                </select>
+                <label class="text-light form-label" for="endereco">Endereço:</label>
+                <input type="text" name="endereco" class="form-control border border-secondary" id="endereco" value="{{ endereco.endereco }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="text-light form-label" for="numero">Número:</label>
+                <input type="number" name="numero" class="form-control border border-secondary" id="numero" value="{{ endereco.numero }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="text-light form-label" for="cep">CEP:</label>
+                <input type="text" name="cep" class="form-control border border-secondary" id="cep" value="{{ endereco.cep }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="text-light form-label" for="bairro">Bairro:</label>
+                <input type="text" name="bairro" class="form-control border border-secondary" id="bairro" value="{{ endereco.bairro }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="text-light form-label" for="cidade">Cidade:</label>
+                <input type="text" name="cidade" class="form-control border border-secondary" id="cidade" value="{{ endereco.cidade }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="text-light form-label" for="estado">Estado:</label>
+                <input type="text" name="estado" class="form-control border border-secondary" id="estado" value="{{ endereco.estado }}" required>
             </div>
 
-            <button type="submit" class="btn btn-primary">Atualizar Cadastro</button>
+            <!-- Seção de Integração -->
+            <h4 class="text-light mt-4">Integração</h4>
+            <div class="mb-3">
+                <label class="text-light form-label" for="data_integracao">Data da Integração:</label>
+                <input type="date" name="data_integracao" class="form-control border border-secondary" id="data_integracao" value="{{ integracao.data_integracao }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="text-light form-label" for="resultado">Resultado:</label>
+                <input type="text" name="resultado" class="form-control border border-secondary" id="resultado" value="{{ integracao.resultado }}" required>
+            </div>
+            <div class="mb-3">
+                <label class="text-light form-label" for="notas">Notas:</label>
+                <textarea name="notas" class="form-control border border-secondary" id="notas" rows="3" required>{{ integracao.notas }}</textarea>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Atualizar Cadastro</button>
+                <a href="{% url 'lista_cadastros' %}" class="btn btn-secondary">Voltar</a>
+            </div>
         </form>
     </div>
 
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
+

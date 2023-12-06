@@ -1,69 +1,67 @@
+<!-- lista_cadastros.html -->
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
-    <title>Editar Cadastro</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
+        <title>Lista de Cadastros</title>
+    </head>
 <body>
     <div class="container mt-3 p-5 rounded-2 bg-dark">
-        <h3 class="text-light">Editar Cadastro</h3>
-        <hr class="bg-light">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="text-light">Lista de Cadastros</h3>
+            <a href="{% url 'criar_cadastro' %}" class="btn btn-success">
+                <i class="fas fa-plus-circle"></i> Adicionar Novo
+            </a>
+        </div>
 
-        <!-- Formulário de Edição de Cadastro -->
-        <form action="{% url 'atualizar_cadastro' cadastro.id %}" method="POST">
-            {% csrf_token %}
-            
-            <!-- Seção de Edição do Cadastro -->
-            <h4 class="text-light">Dados do Cadastro</h4>
-            <div class="mb-3">
-                <label class="text-light form-label" for="nome">Nome:</label>
-                <input type="text" name="nome" class="form-control border border-secondary" id="nome" value="{{ cadastro.nome }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="sobrenome">Sobrenome:</label>
-                <input type="text" name="sobrenome" class="form-control border border-secondary" id="sobrenome" value="{{ cadastro.sobrenome }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="idade">Idade:</label>
-                <input type="number" name="idade" class="form-control border border-secondary" id="idade" value="{{ cadastro.idade }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="telefone">Telefone:</label>
-                <input type="text" name="telefone" class="form-control border border-secondary" id="telefone" value="{{ cadastro.telefone }}" required>
-            </div>
-
-            <!-- Seção de Edição de Endereço -->
-            <h4 class="text-light">Endereço</h4>
-            <!-- Campos de Endereço (ajustar de acordo com o modelo EnderecoDosCadastros) -->
-            <!-- Exemplo de campos, ajuste conforme sua estrutura de modelo -->
-            <div class="mb-3">
-                <label class="text-light form-label" for="endereco">Endereço:</label>
-                <input type="text" name="endereco" class="form-control border border-secondary" id="endereco" value="{{ cadastro.endereco.endereco }}" required>
-            </div>
-            <!-- Adicionar campos adicionais como número, cidade, estado etc. -->
-
-            <!-- Seção de Edição de Integração -->
-            <h4 class="text-light">Integração</h4>
-            <!-- Campos de Integração (ajustar de acordo com o modelo Integracao) -->
-            <!-- Exemplo de campos, ajuste conforme sua estrutura de modelo -->
-            <div class="mb-3">
-                <label class="text-light form-label" for="data_integracao">Data de Integração:</label>
-                <input type="date" name="data_integracao" class="form-control border border-secondary" id="data_integracao" value="{{ cadastro.integracao.data_integracao }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="resultado">Resultado:</label>
-                <input type="text" name="resultado" class="form-control border border-secondary" id="resultado" value="{{ cadastro.integracao.resultado }}" required>
-            </div>
-            <!-- Adicionar campos adicionais como notas etc. -->
-
-            <button type="submit" class="btn btn-primary">Atualizar Cadastro</button>
-        </form>
+        <!-- Tabela de cadastros -->
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Sobrenome</th>
+                    <th>Idade</th>
+                    <th>Telefone</th>
+                    <th>Endereço</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>Data de Integração</th>
+                    <th>Resultado</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cadastro in cadastros %}
+                <tr>
+                    <td>{{ cadastro.nome }}</td>
+                    <td>{{ cadastro.sobrenome }}</td>
+                    <td>{{ cadastro.idade }}</td>
+                    <td>{{ cadastro.telefone }}</td>
+                    <!-- Assumindo que cada cadastro tem um único endereço e integração -->
+                    <td>{{ cadastro.enderecos.first.endereco }}</td>
+                    <td>{{ cadastro.enderecos.first.cidade }}</td>
+                    <td>{{ cadastro.enderecos.first.estado }}</td>
+                    <td>{{ cadastro.integracoes.first.data_integracao }}</td>
+                    <td>{{ cadastro.integracoes.first.resultado }}</td>
+                    <td>
+                        <a href="{% url 'editar_cadastro' cadastro.id %}" class="btn btn-primary">Editar</a>
+                        <a href="{% url 'deletar_cadastro' cadastro.id %}" class="btn btn-danger">Deletar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10">Nenhum cadastro encontrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

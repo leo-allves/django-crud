@@ -1,5 +1,6 @@
+{% load static %} 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,7 @@
         <h3 class="text-light">Deletar Cadastro</h3>
         <hr class="bg-light">
 
-        <form action="{% url 'confirmar_deletar_cadastro' cadastro.id %}" method="post">
+        <form action="{% url 'deletar_cadastro' cadastro.id %}" method="post">
             {% csrf_token %}
             <div class="alert alert-danger" role="alert">
                 Tem certeza de que deseja deletar o cadastro de <strong>{{ cadastro.nome }} {{ cadastro.sobrenome }}</strong>?

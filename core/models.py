@@ -1,108 +1,69 @@
-from django.shortcuts import render, redirect, get_object_or_404
-# from core.models import Cadastro, EnderecoDosCadastros, Integracao, Movimento
-from .models import Cadastro, EnderecoDosCadastros, Integracao, Movimento
-from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.db import models
 
+# Modelo para Cadastro
+class Cadastro(models.Model):
+    nome = models.CharField(max_length=100, db_index=True)
+    sobrenome = models.CharField(max_length=100, db_index=True)
+    idade = models.IntegerField()
+    telefone = models.CharField(max_length=15, db_index=True)
+    escolha_acompanhamento = models.CharField(max_length=100)
+    dat_inc = models.DateTimeField(auto_now_add=True)
+    dat_exc = models.DateTimeField(null=True, blank=True)
+    dat_aut = models.DateTimeField(null=True, blank=True)
 
-# -------------------------------------------------------------
-# CADASTROS
+    def __str__(self):
+        return f"{self.nome} {self.sobrenome}"
 
-# Listar Cadastros
-class ListaCadastrosView(ListView):
-    model = Cadastro
-    template_name = 'cadastros/lista_cadastros.html'
-    context_object_name = 'cadastros'
+# Modelo para Endereço dos Cadastros
+class EnderecoDosCadastros(models.Model):
+    cadastro = models.ForeignKey(Cadastro, on_delete=models.CASCADE, related_name='enderecos')
+    endereco = models.CharField(max_length=255)
+    numero = models.IntegerField()
+    cep = models.CharField(max_length=9)
+    bairro = models.CharField(max_length=100)
+    cidade = models.CharField(max_length=100, db_index=True)
+    estado = models.CharField(max_length=2, db_index=True)
+    dat_inc = models.DateTimeField(auto_now_add=True)
+    dat_exc = models.DateTimeField(null=True, blank=True)
+    dat_aut = models.DateTimeField(null=True, blank=True)
 
-# Criar Registro Integrado (Cadastro, Endereço e Integração)
-class CriarRegistroIntegradoView(CreateView):
-    model = Cadastro
-    fields = ['nome', 'sobrenome', 'idade', 'telefone', 'escolha_acompanhamento']
-    template_name = 'cadastros/criar_cadastro.html'
+    def __str__(self):
+        return self.endereco
 
-    def form_valid(self, form):
-        # Aqui você precisa salvar o Cadastro antes de poder criar os objetos relacionados.
-        self.object = form.save()
-        # Crie um objeto EnderecoDosCadastros relacionado.
-        EnderecoDosCadastros.objects.create(
-            cadastro=self.object,
-            endereco=self.request.POST.get('endereco'),
-            numero=self.request.POST.get('numero'),
-            cep=self.request.POST.get('cep'),
-            bairro=self.request.POST.get('bairro'),
-            cidade=self.request.POST.get('cidade'),
-            estado=self.request.POST.get('estado'),
-        )
-        # Crie um objeto Integracao relacionado.
-        Integracao.objects.create(
-            cadastro=self.object,
-            data_integracao=self.request.POST.get('data_integracao'),
-            resultado=self.request.POST.get('resultado_integracao'),
-            notas=self.request.POST.get('notas_integracao'),
-        )
-        return redirect(self.get_success_url())
+# Modelo para Acompanhamento (para uso futuro)
+class Acompanhamento(models.Model):
+    cadastro = models.ForeignKey(Cadastro, on_delete=models.CASCADE, related_name='acompanhamentos')
+    data_ligacao = models.DateField(db_index=True)
+    resultado_acompanhamento = models.CharField(max_length=100)
+    dat_inc = models.DateTimeField(auto_now_add=True)
+    dat_exc = models.DateTimeField(null=True, blank=True)
+    dat_aut = models.DateTimeField(null=True, blank=True)
 
-    def get_success_url(self):
-        return reverse_lazy('lista_cadastros')
+    def __str__(self):
+        return f"{self.cadastro} - {self.data_ligacao}"
 
-# Atualizar Registro Integrado (não incluído neste exemplo, mas seria similar ao CriarRegistroIntegradoView)
+# Modelo para Integração
+class Integracao(models.Model):
+    cadastro = models.ForeignKey(Cadastro, on_delete=models.CASCADE, related_name='integracoes')
+    data_integracao = models.DateField(db_index=True)
+    resultado = models.CharField(max_length=100)
+    notas = models.TextField()
+    dat_inc = models.DateTimeField(auto_now_add=True)
+    dat_exc = models.DateTimeField(null=True, blank=True)
+    dat_aut = models.DateTimeField(null=True, blank=True)
 
-# Deletar Cadastro
-class DeletarCadastroView(DeleteView):
-    model = Cadastro
-    template_name = 'cadastros/deletar_cadastro.html'
-    context_object_name = 'cadastro'
-    success_url = reverse_lazy('lista_cadastros')
+    def __str__(self):
+        return f"{self.cadastro} - {self.data_integracao}"
 
-    def delete(self, request, *args, **kwargs):
-        # Sobrescrever o método delete para também deletar objetos relacionados, se necessário.
-        # Se você estiver usando o `on_delete=models.CASCADE`, isso pode não ser necessário.
-        self.get_object().delete()
-        return redirect(self.success_url)
+# Modelo para Movimento
+class Movimento(models.Model):
+    cadastro = models.ForeignKey(Cadastro, on_delete=models.CASCADE, related_name='movimentos')
+    endereco_evento = models.CharField(max_length=255)
+    data_evento = models.DateField(db_index=True)
+    observacoes = models.TextField()
+    dat_inc = models.DateTimeField(auto_now_add=True)
+    dat_exc = models.DateTimeField(null=True, blank=True)
+    dat_aut = models.DateTimeField(null=True, blank=True)
 
-# Função para ver detalhes do Cadastro (opcional)
-def detalhes_cadastro(request, pk):
-    cadastro = get_object_or_404(Cadastro, pk=pk)
-    endereco = get_object_or_404(EnderecoDosCadastros, cadastro=pk)
-    integracao = get_object_or_404(Integracao, cadastro=pk)
-    return render(request, 'cadastros/detalhes_cadastro.html', {
-        'cadastro': cadastro,
-        'endereco': endereco,
-        'integracao': integracao
-    })
-
-
-# -------------------------------------------------------------
-
-# MOVIMENTO
-
-
-# Listar Movimentos
-class ListaMovimentosView(ListView):
-    model = Movimento
-    template_name = 'movimentos/listar_movimento.html'
-
-# Detalhes do Movimento
-class DetalhesMovimentoView(DetailView):
-    model = Movimento
-    template_name = 'movimentos/detalhes_movimento.html'
-
-# Criar Movimento
-class CriarMovimentoView(CreateView):
-    model = Movimento
-    fields = ['cadastro', 'endereco_evento', 'data_evento', 'observacoes']
-    template_name = 'movimentos/cadastrar_movimento.html'
-    success_url = reverse_lazy('lista_movimentos')
-
-# Atualizar Movimento
-class AtualizarMovimentoView(UpdateView):
-    model = Movimento
-    fields = ['cadastro', 'endereco_evento', 'data_evento', 'observacoes']
-    template_name = 'movimentos/editar_movimento.html'
-    success_url = reverse_lazy('lista_movimentos')
-
-# Deletar Movimento
-class DeletarMovimentoView(DeleteView):
-    model = Movimento
-    template_name = 'movimentos/deletar_movimento.html'
-    success_url = reverse_lazy('lista_movimentos')
+    def __str__(self):
+        return f"{self.cadastro} - {self.data_evento}"

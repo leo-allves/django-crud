@@ -1,16 +1,22 @@
-<!-- lista_cadastros.html -->
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
-        <title>Lista de Cadastros</title>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
+    <title>Lista de Cadastros</title>
+    <style>
+        .text-truncate {
+            max-width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
 <body>
     <div class="container mt-3 p-5 rounded-2 bg-dark">
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -20,48 +26,48 @@
             </a>
         </div>
 
-        <!-- Tabela de cadastros -->
-        <table class="table table-dark table-striped">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Sobrenome</th>
-                    <th>Idade</th>
-                    <th>Telefone</th>
-                    <th>Endereço</th>
-                    <th>Cidade</th>
-                    <th>Estado</th>
-                    <th>Data de Integração</th>
-                    <th>Resultado</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cadastro in cadastros %}
-                <tr>
-                    <td>{{ cadastro.nome }}</td>
-                    <td>{{ cadastro.sobrenome }}</td>
-                    <td>{{ cadastro.idade }}</td>
-                    <td>{{ cadastro.telefone }}</td>
-                    <!-- Assumindo que cada cadastro tem um único endereço e integração -->
-                    <td>{{ cadastro.enderecos.first.endereco }}</td>
-                    <td>{{ cadastro.enderecos.first.cidade }}</td>
-                    <td>{{ cadastro.enderecos.first.estado }}</td>
-                    <td>{{ cadastro.integracoes.first.data_integracao }}</td>
-                    <td>{{ cadastro.integracoes.first.resultado }}</td>
-                    <td>
-                        <a href="{% url 'editar_cadastro' cadastro.id %}" class="btn btn-primary">Editar</a>
-                        <a href="{% url 'deletar_cadastro' cadastro.id %}" class="btn btn-danger">Deletar</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="10">Nenhum cadastro encontrado.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Sobrenome</th>
+                        <th>Idade</th>
+                        <th>Telefone</th>
+                        <th>Endereço</th>
+                        <th>Cidade</th>
+                        <th>Estado</th>
+                        <th>Data de Integração</th>
+                        <th>Resultado</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cadastro in cadastros %}
+                    <tr>
+                        <td class="text-truncate">{{ cadastro.nome }}</td>
+                        <td class="text-truncate">{{ cadastro.sobrenome }}</td>
+                        <td>{{ cadastro.idade }}</td>
+                        <td class="text-truncate">{{ cadastro.telefone }}</td>
+                        <td class="text-truncate">{{ cadastro.enderecos.first.endereco }}</td>
+                        <td class="text-truncate">{{ cadastro.enderecos.first.cidade }}</td>
+                        <td>{{ cadastro.enderecos.first.estado }}</td>
+                        <td>{{ cadastro.integracoes.first.data_integracao }}</td>
+                        <td>{{ cadastro.integracoes.first.resultado }}</td>
+                        <td>
+                            <a href="{% url 'editar_cadastro' cadastro.id %}" class="btn btn-primary">Editar</a>
+                            <a href="{% url 'deletar_cadastro' cadastro.id %}" class="btn btn-danger">Deletar</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="10">Nenhum cadastro encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 </body>
 </html>

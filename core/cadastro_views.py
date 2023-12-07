@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from .models import Cadastro, EnderecoDosCadastros, Integracao
+from django.db import transaction
+from django.contrib import messages
 
 
 # Listar Cadastros
@@ -15,33 +17,94 @@ class ListaCadastrosView(ListView):
         return Cadastro.objects.all().prefetch_related('enderecos', 'integracoes')
 
 # Criar Cadastro
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from django.contrib import messages
+from django.db import transaction
+from .models import Cadastro, EnderecoDosCadastros, Integracao
+
 class CriarCadastroView(CreateView):
     model = Cadastro
     fields = ['nome', 'sobrenome', 'idade', 'telefone', 'escolha_acompanhamento']
     template_name = 'cadastro/criar_cadastro.html'
 
     def form_valid(self, form):
-        self.object = form.save()
-        endereco_data = {
-            'endereco': self.request.POST.get('endereco'),
-            'numero': self.request.POST.get('numero'),
-            'cep': self.request.POST.get('cep'),
-            'bairro': self.request.POST.get('bairro'),
-            'cidade': self.request.POST.get('cidade'),
-            'estado': self.request.POST.get('estado'),
-        }
-        EnderecoDosCadastros.objects.create(cadastro=self.object, **endereco_data)
+        try:
+            with transaction.atomic():
+                # Salva o cadastro principal
+                cadastro = form.save()
 
-        integracao_data = {
-            'data_integracao': self.request.POST.get('data_integracao'),
-            'resultado': self.request.POST.get('resultado'),
-            'notas': self.request.POST.get('notas'),
-        }
-        Integracao.objects.create(cadastro=self.object, **integracao_data)
-        return redirect(self.get_success_url())
+                # Cria e salva o endereço associado
+                endereco = EnderecoDosCadastros(
+                    cadastro=cadastro,
+                    endereco=self.request.POST.get('endereco'),
+                    numero=self.request.POST.get('numero'),
+                    cep=self.request.POST.get('cep'),
+                    bairro=self.request.POST.get('bairro'),
+                    cidade=self.request.POST.get('cidade'),
+                    estado=self.request.POST.get('estado')
+                )
+                endereco.save()
+
+                # Cria e salva os dados de integração associados
+                integracao = Integracao(
+                    cadastro=cadastro,
+                    data_integracao=self.request.POST.get('data_integracao'),
+                    resultado=self.request.POST.get('resultado'),
+                    notas=self.request.POST.get('notas')
+                )
+                integracao.save()
+
+                messages.success(self.request, "Cadastro criado com sucesso!")
+                return redirect(self.get_success_url())
+        except Exception as e:
+            messages.error(self.request, f"Erro ao criar cadastro: {e}")
+            return super().form_invalid(form)
 
     def get_success_url(self):
         return reverse_lazy('lista_cadastros')
+
+    model = Cadastro
+    fields = ['nome', 'sobrenome', 'idade', 'telefone', 'escolha_acompanhamento']
+    template_name = 'cadastro/criar_cadastro.html'
+
+    def form_valid(self, form):
+        try:
+            with transaction.atomic():
+                # Salva o cadastro principal
+                cadastro = form.save()
+
+                # Cria e salva o endereço associado
+                endereco = EnderecoDosCadastros(
+                    cadastro=cadastro,
+                    endereco=self.request.POST.get('endereco'),
+                    numero=self.request.POST.get('numero'),
+                    cep=self.request.POST.get('cep'),
+                    bairro=self.request.POST.get('bairro'),
+                    cidade=self.request.POST.get('cidade'),
+                    estado=self.request.POST.get('estado')
+                )
+                endereco.save()
+
+                # Cria e salva os dados de integração associados
+                integracao = Integracao(
+                    cadastro=cadastro,
+                    data_integracao=self.request.POST.get('data_integracao'),
+                    resultado=self.request.POST.get('resultado'),
+                    notas=self.request.POST.get('notas')
+                )
+                integracao.save()
+
+                messages.success(self.request, "Cadastro criado com sucesso!")
+                return redirect(self.get_success_url())
+        except Exception as e:
+            messages.error(self.request, f"Erro ao criar cadastro: {e}")
+            return super().form_invalid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('lista_cadastros')
+
 
 # Atualizar Cadastro
 class AtualizarCadastroView(UpdateView):

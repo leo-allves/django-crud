@@ -1,7 +1,8 @@
 # core/admin.py
 
 from django.contrib import admin
-from core.models import Cadastro, EnderecoDosCadastros, Integracao, Movimento
+from core.models import Cadastro, EnderecoDosCadastros, Movimento
+# from core.models import Cadastro, EnderecoDosCadastros, Integracao, Movimento
 # from core.models import Acompanhamento
 
 # Registrando cada modelo para que eles apareçam na interface do admin do Django.
@@ -16,10 +17,10 @@ class EnderecoDosCadastrosAdmin(admin.ModelAdmin):
     search_fields = ['cidade', 'estado']
     list_filter = ['cidade', 'estado']
 
-class IntegracaoAdmin(admin.ModelAdmin):
-    list_display = ['cadastro', 'data_integracao', 'resultado', 'notas']
-    search_fields = ['cadastro__nome', 'cadastro__sobrenome']
-    list_filter = ['data_integracao', 'resultado']
+# class IntegracaoAdmin(admin.ModelAdmin):
+#     list_display = ['cadastro', 'data_integracao', 'resultado', 'notas']
+#     search_fields = ['cadastro__nome', 'cadastro__sobrenome']
+#     list_filter = ['data_integracao', 'resultado']
 
 class MovimentoAdmin(admin.ModelAdmin):
     list_display = ['cadastro', 'endereco_evento', 'data_evento', 'observacoes']
@@ -29,7 +30,7 @@ class MovimentoAdmin(admin.ModelAdmin):
 # Registrando os modelos com o Django admin
 admin.site.register(Cadastro, CadastroAdmin)
 admin.site.register(EnderecoDosCadastros, EnderecoDosCadastrosAdmin)
-admin.site.register(Integracao, IntegracaoAdmin)
+# admin.site.register(Integracao, IntegracaoAdmin)
 admin.site.register(Movimento, MovimentoAdmin)
 
 # Futura inclusão:

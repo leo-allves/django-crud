@@ -5,87 +5,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- Incluído CSS personalizado -->
+    <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
     <title>Editar Cadastro</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif; /* Aplicando a fonte Roboto */
+        }
+        .bg-gradient {
+            background: linear-gradient(to right, #56CCF2, #2F80ED); /* Gradiente de azul */
+            color: white; /* Texto branco para contraste */
+        }
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Sombra para o card */
+        }
+        .btn-primary {
+            background-color: #2F80ED; /* Botão azul para combinar com o gradiente */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-3 p-5 rounded-2 bg-dark">
-        <h3 class="text-light">Editar Cadastro</h3>
-        <hr class="bg-light">
+        <!-- Voltar para lista de cadastros -->
+        <div class="card bg-light">
+            <div class="card-header">Editar Cadastro</div>
+            <div class="card-body">
+                <form id="updateForm" method="POST" action="{% url 'editar_cadastro' cadastro.id %}">
+                    {% csrf_token %}
+                    <!-- Campos do formulário -->
+                    <!-- {{ form.as_p }} -->
+                    <div class="row">
+                        <!-- Assume que o primeiro endereço na lista de endereços é o que queremos editar -->
+                        {% with cadastro.enderecos.first as endereco %}
+                        <div class="col-md-6 mb-3">
+                            <label for="endereco" class="form-label">Endereço:</label>
+                            <input type="text" class="form-control" id="endereco" name="endereco" value="{{ endereco.endereco }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="numero" class="form-label">Número:</label>
+                            <input type="number" class="form-control" id="numero" name="numero" value="{{ endereco.numero }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cep" class="form-label">CEP:</label>
+                            <input type="text" class="form-control" id="cep" name="cep" value="{{ endereco.cep }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="bairro" class="form-label">Bairro:</label>
+                            <input type="text" class="form-control" id="bairro" name="bairro" value="{{ endereco.bairro }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cidade" class="form-label">Cidade:</label>
+                            <input type="text" class="form-control" id="cidade" name="cidade" value="{{ endereco.cidade }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="estado" class="form-label">Estado:</label>
+                            <input type="text" class="form-control" id="estado" name="estado" value="{{ endereco.estado }}" required>
+                        </div>
+                        <!-- {% endwith %} -->
+                    </div>
+                    <!-- Botão para acionar modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmUpdateModal">
+                        Atualizar Cadastro
+                    </button>
 
-        <!-- Formulário de Edição de Cadastro -->
-        <form action="{% url 'editar_cadastro' cadastro.id %}" method="POST">
-            {% csrf_token %}
-            
-            <!-- Seção de Cadastro -->
-            <h4 class="text-light">Dados do Cadastro</h4>
-            <div class="mb-3">
-                <label class="text-light form-label" for="nome">Nome:</label>
-                <input type="text" name="nome" class="form-control border border-secondary" id="nome" value="{{ cadastro.nome }}" required>
+                    <!-- Modal -->
+                    <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="confirmUpdateModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmUpdateModalLabel">Confirmação de Atualização</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Tem certeza que deseja atualizar os dados deste cadastro?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary" onclick="document.getElementById('updateForm').submit();">Confirmar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="sobrenome">Sobrenome:</label>
-                <input type="text" name="sobrenome" class="form-control border border-secondary" id="sobrenome" value="{{ cadastro.sobrenome }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="idade">Idade:</label>
-                <input type="number" name="idade" class="form-control border border-secondary" id="idade" value="{{ cadastro.idade }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="telefone">Telefone:</label>
-                <input type="text" name="telefone" class="form-control border border-secondary" id="telefone" value="{{ cadastro.telefone }}" required>
-            </div>
-
-            <!-- Seção de Endereço -->
-            <h4 class="text-light mt-4">Endereço</h4>
-            <div class="mb-3">
-                <label class="text-light form-label" for="endereco">Endereço:</label>
-                <input type="text" name="endereco" class="form-control border border-secondary" id="endereco" value="{{ endereco.endereco }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="numero">Número:</label>
-                <input type="number" name="numero" class="form-control border border-secondary" id="numero" value="{{ endereco.numero }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="cep">CEP:</label>
-                <input type="text" name="cep" class="form-control border border-secondary" id="cep" value="{{ endereco.cep }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="bairro">Bairro:</label>
-                <input type="text" name="bairro" class="form-control border border-secondary" id="bairro" value="{{ endereco.bairro }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="cidade">Cidade:</label>
-                <input type="text" name="cidade" class="form-control border border-secondary" id="cidade" value="{{ endereco.cidade }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="estado">Estado:</label>
-                <input type="text" name="estado" class="form-control border border-secondary" id="estado" value="{{ endereco.estado }}" required>
-            </div>
-
-            <!-- Seção de Integração -->
-            <h4 class="text-light mt-4">Integração</h4>
-            <div class="mb-3">
-                <label class="text-light form-label" for="data_integracao">Data da Integração:</label>
-                <input type="date" name="data_integracao" class="form-control border border-secondary" id="data_integracao" value="{{ integracao.data_integracao }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="resultado">Resultado:</label>
-                <input type="text" name="resultado" class="form-control border border-secondary" id="resultado" value="{{ integracao.resultado }}" required>
-            </div>
-            <div class="mb-3">
-                <label class="text-light form-label" for="notas">Notas:</label>
-                <textarea name="notas" class="form-control border border-secondary" id="notas" rows="3" required>{{ integracao.notas }}</textarea>
-            </div>
-
-            <div class="mt-4">
-                <button type="submit" class="btn btn-primary">Atualizar Cadastro</button>
-                <a href="{% url 'lista_cadastros' %}" class="btn btn-secondary">Voltar</a>
-            </div>
-        </form>
+        </div>
     </div>
-
-    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 </body>
 </html>
-

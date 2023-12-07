@@ -1,40 +1,47 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-{% load static %}  
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
-    
     <title>Detalhes do Cadastro</title>
 </head>
-<body>
+<body class="bg-gradient">
     <div class="container mt-3 p-5 rounded-2 bg-dark">
-        <h3 class="text-light">Detalhes do Cadastro</h3>
-        <hr class="bg-light">
+        <div class="mb-4">
+            <a href="{% url 'lista_cadastros' %}" class="btn btn-secondary">
+                <i class="fa fa-arrow-left"></i> Voltar para a lista
+            </a>
+        </div>
+        <div class="card bg-light">
+            <div class="card-header">
+                Detalhes do Cadastro
+            </div>
+            <div class="card-body">
+                <h4 class="text-dark">Dados Pessoais</h4>
+                <!-- Informações do cadastro -->
+                <p>Nome: {{ cadastro.nome }}</p>
+                <p>Sobrenome: {{ cadastro.sobrenome }}</p>
+                <p>Idade: {{ cadastro.idade }}</p>
+                <p>Telefone: {{ cadastro.telefone }}</p>
+                <p>Telefone: {{ cadastro.escolha_acompanhamento }}</p>
 
-        <!-- Seção de Detalhes do Cadastro -->
-        <div class="mb-3 text-light">
-            <strong>Nome:</strong> {{ cadastro.nome }}
+                <h4 class="text-dark">Endereço</h4>
+                <!-- Informações do endereço -->
+                <p>Endereço: {{ cadastro.enderecos.first.endereco }}</p>
+                <p>Número: {{ cadastro.enderecos.first.numero }}</p>
+                <p>CEP: {{ cadastro.enderecos.first.cep }}</p>
+                <p>Bairro: {{ cadastro.enderecos.first.bairro }}</p>
+                <p>Cidade: {{ cadastro.enderecos.first.cidade }}</p>
+                <p>Estado: {{ cadastro.enderecos.first.estado }}</p>
+                
+                <a href="{% url 'editar_cadastro' cadastro.id %}" class="btn btn-primary">Editar</a>
+                <a href="{% url 'deletar_cadastro' cadastro.id %}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar este cadastro?');">Deletar</a>
+            </div>
         </div>
-        <div class="mb-3 text-light">
-            <strong>Sobrenome:</strong> {{ cadastro.sobrenome }}
-        </div>
-        <div class="mb-3 text-light">
-            <strong>Idade:</strong> {{ cadastro.idade }}
-        </div>
-        <div class="mb-3 text-light">
-            <strong>Telefone:</strong> {{ cadastro.telefone }}
-        </div>
-        <div class="mb-3 text-light">
-            <strong>Escolha de Acompanhamento:</strong> {{ cadastro.escolha_acompanhamento }}
-        </div>
-
-        <!-- Botões de Ação -->
-        <a href="{% url 'editar_cadastro' cadastro.id %}" class="btn btn-primary">Editar</a>
-        <a href="{% url 'lista_cadastros' %}" class="btn btn-secondary">Voltar à Lista</a>
     </div>
 
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>

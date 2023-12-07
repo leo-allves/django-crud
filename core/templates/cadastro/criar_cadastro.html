@@ -5,87 +5,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://kit.fontawesome.com/8786c39b09.js"></script>
     <title>Criar Cadastro</title>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-3 p-5 rounded-2 bg-dark">
         <div class="mb-4">
             <a href="{% url 'lista_cadastros' %}" class="btn btn-secondary">
                 <i class="fa fa-arrow-left"></i> Voltar para a lista
             </a>
         </div>
-        <div class="card">
+        <div class="card bg-light">
             <div class="card-header">
                 Novo Cadastro
             </div>
             <div class="card-body">
                 <form method="POST" action="{% url 'criar_cadastro' %}">
                     {% csrf_token %}
-                    <h4>Dados Pessoais</h4>
-                    <div class="mb-3">
-                        <label for="nome" class="form-label">Nome:</label>
-                        <input type="text" class="form-control" id="nome" name="nome" required>
+                    <h4 class="text-dark">Dados Pessoais</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nome" class="form-label">Nome:</label>
+                            <input type="text" class="form-control" id="nome" name="nome" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="sobrenome" class="form-label">Sobrenome:</label>
+                            <input type="text" class="form-control" id="sobrenome" name="sobrenome" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="sobrenome" class="form-label">Sobrenome:</label>
-                        <input type="text" class="form-control" id="sobrenome" name="sobrenome" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="idade" class="form-label">Idade:</label>
-                        <input type="number" class="form-control" id="idade" name="idade" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="telefone" class="form-label">Telefone:</label>
-                        <input type="tel" class="form-control" id="telefone" name="telefone" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="escolha_acompanhamento" class="form-label">Escolha de Acompanhamento:</label>
-                        <input type="text" class="form-control" id="escolha_acompanhamento" name="escolha_acompanhamento" required>
-                    </div>
-
-                    <h4>Endereço</h4>
-                    <div class="mb-3">
-                        <label for="endereco" class="form-label">Endereço:</label>
-                        <input type="text" class="form-control" id="endereco" name="endereco" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="numero" class="form-label">Número:</label>
-                        <input type="number" class="form-control" id="numero" name="numero" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="cep" class="form-label">CEP:</label>
-                        <input type="text" class="form-control" id="cep" name="cep" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="bairro" class="form-label">Bairro:</label>
-                        <input type="text" class="form-control" id="bairro" name="bairro" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="cidade" class="form-label">Cidade:</label>
-                        <input type="text" class="form-control" id="cidade" name="cidade" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="estado" class="form-label">Estado:</label>
-                        <input type="text" class="form-control" id="estado" name="estado" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="idade" class="form-label">Idade:</label>
+                            <input type="number" class="form-control" id="idade" name="idade" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="telefone" class="form-label">Telefone:</label>
+                            <input type="tel" class="form-control" id="telefone" name="telefone" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="escolha_acompanhamento" class="form-label">Igreja Acompanhamento:</label>
+                            <input type="text" class="form-control" id="escolha_acompanhamento" name="escolha_acompanhamento" required>
+                        </div>
                     </div>
 
-                    <h4>Integração</h4>
-                    <div class="mb-3">
-                        <label for="data_integracao" class="form-label">Data da Integração:</label>
-                        <input type="date" class="form-control" id="data_integracao" name="data_integracao" required>
+                    <h4 class="text-dark">Endereço</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="endereco" class="form-label">Endereço:</label>
+                            <input type="text" class="form-control" id="endereco" name="endereco" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="numero" class="form-label">Número:</label>
+                            <input type="number" class="form-control" id="numero" name="numero" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="resultado" class="form-label">Resultado:</label>
-                        <select class="form-select" id="resultado" name="resultado" required>
-                            <option value="">Selecione o resultado</option>
-                            <option value="Integrado">Integrado</option>
-                            <option value="Não Integrado">Não Integrado</option>
-                        </select>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cep" class="form-label">CEP:</label>
+                            <input type="text" class="form-control" id="cep" name="cep" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="bairro" class="form-label">Bairro:</label>
+                            <input type="text" class="form-control" id="bairro" name="bairro" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="notas" class="form-label">Notas:</label>
-                        <textarea class="form-control" id="notas" name="notas" rows="3"></textarea>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cidade" class="form-label">Cidade:</label>
+                            <input type="text" class="form-control" id="cidade" name="cidade" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="estado" class="form-label">Estado:</label>
+                            <input type="text" class="form-control" id="estado" name="estado" required>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Salvar Cadastro</button>

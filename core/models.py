@@ -2,11 +2,11 @@ from django.db import models
 
 # Modelo para Cadastro
 class Cadastro(models.Model):
-    nome = models.CharField(max_length=100)
-    sobrenome = models.CharField(max_length=100)
+    nome = models.CharField(max_length=100, db_index=True)
+    sobrenome = models.CharField(max_length=100, db_index=True)
     idade = models.IntegerField()
-    telefone = models.CharField(max_length=15)
-    escolha_acompanhamento = models.CharField(max_length=100, blank=True)
+    telefone = models.CharField(max_length=15, db_index=True)
+    escolha_acompanhamento = models.CharField(max_length=100)
     dat_inc = models.DateTimeField(auto_now_add=True)
     dat_exc = models.DateTimeField(null=True, blank=True)
     dat_aut = models.DateTimeField(null=True, blank=True)
@@ -18,11 +18,11 @@ class Cadastro(models.Model):
 class EnderecoDosCadastros(models.Model):
     cadastro = models.ForeignKey(Cadastro, on_delete=models.CASCADE, related_name='enderecos')
     endereco = models.CharField(max_length=255)
-    numero = models.CharField(max_length=20)  # Alterado de IntegerField para CharField
+    numero = models.IntegerField()
     cep = models.CharField(max_length=9)
     bairro = models.CharField(max_length=100)
-    cidade = models.CharField(max_length=100)
-    estado = models.CharField(max_length=2)
+    cidade = models.CharField(max_length=100, db_index=True)
+    estado = models.CharField(max_length=2, db_index=True)
     dat_inc = models.DateTimeField(auto_now_add=True)
     dat_exc = models.DateTimeField(null=True, blank=True)
     dat_aut = models.DateTimeField(null=True, blank=True)
@@ -30,25 +30,26 @@ class EnderecoDosCadastros(models.Model):
     def __str__(self):
         return self.endereco
 
-# Modelo para Integração
+# Modelo para Integração (desacoplado dos cadastros atualmente)
 class Integracao(models.Model):
-    cadastro = models.ForeignKey(Cadastro, on_delete=models.CASCADE, related_name='integracoes')
-    data_integracao = models.DateField()
+    # Cadastro removido por enquanto para desacoplamento
+    # cadastro = models.ForeignKey(Cadastro, on_delete=models.CASCADE, related_name='integracoes')
+    data_integracao = models.DateField(db_index=True)
     resultado = models.CharField(max_length=100)
-    notas = models.TextField(blank=True)
+    notas = models.TextField()
     dat_inc = models.DateTimeField(auto_now_add=True)
     dat_exc = models.DateTimeField(null=True, blank=True)
     dat_aut = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.cadastro} - {self.data_integracao}"
+        return f"Integração em {self.data_integracao} - {self.resultado}"
 
-# Modelo para Movimento (se necessário)
+# Modelo para Movimento
 class Movimento(models.Model):
     cadastro = models.ForeignKey(Cadastro, on_delete=models.CASCADE, related_name='movimentos')
     endereco_evento = models.CharField(max_length=255)
-    data_evento = models.DateField()
-    observacoes = models.TextField(blank=True)
+    data_evento = models.DateField(db_index=True)
+    observacoes = models.TextField()
     dat_inc = models.DateTimeField(auto_now_add=True)
     dat_exc = models.DateTimeField(null=True, blank=True)
     dat_aut = models.DateTimeField(null=True, blank=True)
